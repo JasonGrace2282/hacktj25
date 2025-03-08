@@ -48,7 +48,7 @@ services:
       - -c
       - |
         pnpm install
-        exec pnpm start
+        exec pnpm dev
 
 networks:
   hacktj_net:
