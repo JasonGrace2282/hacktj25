@@ -1,23 +1,6 @@
 services:
   django:
-    container_name: hacktj_django
-    build:
-      dockerfile_inline:
-        FROM ghcr.io/astral-sh/uv:0.6-python3.13-bookworm-slim
-
-        WORKDIR /app
-
-        COPY pyproject.toml .
-        COPY uv.lock .
-
-        ENV TZ=America/New_York
-
-        ENV UV_LINK_MODE=copy \
-            UV_COMPILE_BYTECODE=1 \
-            UV_PYTHON_DOWNLOADS=never \
-            UV_PYTHON=python3.13
-
-    image: hacktj25_base
+    image: ghcr.io/astral-sh/uv:0.6-python3.13-bookworm-slim
     working_dir: /app
     restart: on-failure
     networks:
@@ -25,7 +8,7 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - .:/hacktj5
+      - .:/app
       - /app/.venv
     entrypoint:
       - uv
@@ -37,43 +20,40 @@ services:
   next:
     container_name: hacktj25_nextjs
     build:
-      dockerfile_inline:
-        FROM ghcr.io/astral-sh/uv:0.6-python3.13-bookworm-slim
+      dockerfile_inline: |
+        FROM node:23-alpine3.20
+
+        ENV PNPM_HOME="/pnpm"
+        ENV PATH="$PNPM_HOME:$PATH"
 
         WORKDIR /app
 
-        COPY pyproject.toml .
-        COPY uv.lock .
+        COPY hacktj25/pnpm-lock.yaml .
+        COPY hacktj25/package.json .
 
         ENV TZ=America/New_York
 
-        ENV UV_LINK_MODE=copy \
-            UV_COMPILE_BYTECODE=1 \
-            UV_PYTHON_DOWNLOADS=never \
-            UV_PYTHON=python3.13
-
+        RUN corepack enable
     image: hacktj25_base
     working_dir: /app
     restart: on-failure
     networks:
       - hacktj_net
     ports:
-      - 8080:8080
+      - 3000:3000
     volumes:
-      - .:/hacktj5
-      - /app/.venv
+      - ./hacktj25:/app
     entrypoint:
-      - uv
-      - run
-      - /app/manage.py
-      - runserver
-      - 0.0.0.0:8080
-
+      - sh
+      - -c
+      - |
+        pnpm install
+        exec pnpm start
 
 networks:
   hacktj_net:
     driver: bridge
-    name: hacktj_net
+    name: hacktj25_net
 
 volumes:
   hacktj-pgdata:
