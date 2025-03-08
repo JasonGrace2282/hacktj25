@@ -1,50 +1,24 @@
 <script lang="ts" setup>
-<<<<<<< HEAD
-import HelloWorld from '@/components/HelloWorld.vue';
-</script>
 
-<template>
-  <div>
-    <a href="https://wxt.dev" target="_blank">
-      <img src="/wxt.svg" class="logo" alt="WXT logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="@/assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="WXT + Vue" />
-</template>
-
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #54bc4ae0);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-=======
 import CredibilityScore from '@/components/CredibilityScore.vue';
 import InfoCard from '@/components/InfoCard.vue';
 import { ref, onMounted } from 'vue';
 
-const credibility = 75;
+const credibility = 30;
 const currentWebsite = ref('');
 
 const cardData = [
   {
     title: 'Fact Checking',
     description: 'Multiple reliable sources verify the information presented on this site.',
-    status: 'positive' as const
+    status: 'positive' as const,
+    credibilityScore: credibility
   },
   {
     title: 'Source History',
     description: 'This source has a track record of accurate reporting and transparency.',
-    status: 'positive' as const
+    status: 'positive' as const,
+    credibilityScore: credibility
   }
 ];
 
@@ -54,7 +28,6 @@ onMounted(async () => {
     if (tab?.url) {
       const url = new URL(tab.url);
       if (url.hostname.includes('tiktok.com')) {
-        // Extract username from TikTok URL
         const pathParts = url.pathname.split('/');
         const username = pathParts.find(part => part.startsWith('@'));
         currentWebsite.value = username || 'Unknown TikTok user';
@@ -86,6 +59,7 @@ onMounted(async () => {
           :title="card.title"
           :description="card.description"
           :status="card.status"
+          :credibility-score="card.credibilityScore"
         />
       </div>
       
@@ -137,6 +111,5 @@ onMounted(async () => {
   padding: 0.5rem;
   margin-top: 0.25rem;
   border-top: 1px solid #3a3a3a;
->>>>>>> c6da4c4 (progress)
 }
 </style>

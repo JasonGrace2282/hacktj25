@@ -3,16 +3,27 @@ defineProps<{
   title: string;
   description: string;
   status: 'positive' | 'neutral' | 'negative';
+  credibilityScore: number;
 }>();
+
+const getColor = (score: number) => {
+  if (score >= 70) return '#54bc4a';
+  if (score >= 40) return '#f0ad4e';
+  return '#d9534f';
+};
 </script>
 
 <template>
-  <div class="info-card">
-    <div class="card-header">
-      <h3>{{ title }}</h3>
-      <span class="indicator" :class="status">{{ status === 'positive' ? '✓' : status === 'neutral' ? '!' : '×' }}</span>
+  <div class="info-card" :style="{ borderColor: getColor(credibilityScore) }">
+    <div class="card-content">
+      <div class="card-header">
+        <h3 :style="{ color: getColor(credibilityScore) }">{{ title }}</h3>
+        <span class="indicator" :class="status" :style="{ color: getColor(credibilityScore) }">
+          {{ status === 'positive' ? '✓' : status === 'neutral' ? '!' : '×' }}
+        </span>
+      </div>
+      <p>{{ description }}</p>
     </div>
-    <p>{{ description }}</p>
   </div>
 </template>
 
@@ -20,14 +31,14 @@ defineProps<{
 .info-card {
   background: #2a2a2a;
   border-radius: 8px;
-  padding: 0.875rem;
   text-align: left;
-  border: 1px solid #3a3a3a;
-  transition: transform 0.2s ease;
+  border: 1px solid;
+  position: relative;
+  transition: all 0.3s ease;
 }
 
-.info-card:hover {
-  transform: translateY(-2px);
+.card-content {
+  padding: 0.875rem;
 }
 
 .card-header {
@@ -38,10 +49,10 @@ defineProps<{
 }
 
 .info-card h3 {
-  color: #54bc4a;
   font-size: 1rem;
   font-weight: bold;
   margin: 0;
+  transition: color 0.3s ease;
 }
 
 .info-card p {
@@ -56,6 +67,7 @@ defineProps<{
   font-weight: bold;
   padding: 0.2rem;
   border-radius: 50%;
+  transition: color 0.3s ease;
 }
 
 .indicator.positive {
