@@ -1,11 +1,22 @@
+import os
+import tempfile
 from collections.abc import Iterator
 from channels.generic.websocket import WebsocketConsumer
 from textblob import TextBlob
+import requests
 from rest_framework.renderers import JSONRenderer
+import whisper
+import moviepy
+import yt_dlp
+import easyocr
+import cv2
+# manually installed: easyocr, whisper
 
 from .models import BiasedContent, BiasedMedia
 from .serializers import BiasedContentSerializer
 
+audio_model = whisper.load_model("base")
+reader = easyocr.Reader(['en'])
 
 class Credibility(WebsocketConsumer):
     def connect(self):
@@ -18,11 +29,36 @@ class Credibility(WebsocketConsumer):
         pass
 
     def receive(self, text_data=None, bytes_data=None):
-        # can't process bytes
-        if text_data is None:
-            return
+        # TODO: figure out how to extract info
+        audio_text = None
+        video_text = []
 
-        media = BiasedMedia.objects.filter(url=self.url).first()
+        if bytes_data:
+            url = "https://www.tiktok.com/@faroukiie/video/7458768121059396894?is_from_webapp=1&sender_device=pc"
+            videoId = yt_dlp.YoutubeDL().extract_info(url)["id"]
+            temp_video = os.path.join(tempfile.gettempdir(), videoId) + ".mp4"
+
+            with yt_dlp.YoutubeDL({"outtmpl": temp_video}) as ydl:
+                info_dict = ydl.extract_info(url, download=True)
+
+            encoded_video = moviepy.VideoFileClip(temp_video)
+            temp_audio = os.path.join(tempfile.gettempdir(), videoId) + ".wav"
+            encoded_video.audio.write_audiofile(temp_audio)
+
+            transcribed_audio = audio_model.transcribe(temp_audio)
+
+            audio_text = transcribed_audio
+
+            for t in range(0, encoded_video.n_frames, encoded_video.fps):
+                frame = encoded_video.get_frame(t)
+                frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+
+                results = reader.readtext(frame, detail=0)
+                if results:
+                    video_text.append((t / encoded_video.fps, results))
+
+
+        media = BiasedMedia.objects.filter(url=url).first()
         if media is not None and media.complete:
             media_content: Iterator[BiasedContent] = media.biased_content.all()
         else:
