@@ -3,7 +3,14 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class BiasedMedia(models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
+    url = models.URLField(unique=True)
+    complete = models.BooleanField(default=False)
+
+    objects = models.Manager()
+
+    def __str__(self) -> str:
+        return self.name
 
 
 class BiasedContent(models.Model):
@@ -25,3 +32,6 @@ class BiasedContent(models.Model):
     bias_strength = models.FloatField(
         validators=[MinValueValidator(0), MaxValueValidator(1)]
     )
+
+    def __str__(self) -> str:
+        return f"{self.media.name} - {self.content[:50]} @ {self.timestamp}"
