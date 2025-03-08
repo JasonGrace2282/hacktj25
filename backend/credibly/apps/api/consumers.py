@@ -22,7 +22,6 @@ class Credibility(WebsocketConsumer):
         if text_data is None:
             return
 
-        time_stamp = text_data
         media = BiasedMedia.objects.filter(url=self.url).first()
         if media is not None and media.complete:
             media_content: Iterator[BiasedContent] = media.biased_content.all()
@@ -51,4 +50,5 @@ class Credibility(WebsocketConsumer):
                 media=media,
                 content=sentence.raw,
                 bias_strength=sentence.sentiment.subjectivity,
+                accuracy=None,
             )

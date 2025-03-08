@@ -21,7 +21,6 @@ class BiasedContent(models.Model):
     )
 
     content = models.TextField()
-    timestamp = models.DurationField(verbose_name="Video timestamp", null=True)
 
     accuracy = models.FloatField(
         help_text="A value between 0 and 1 representing how truthful the information is",
@@ -34,4 +33,4 @@ class BiasedContent(models.Model):
     )
 
     def __str__(self) -> str:
-        return f"{self.media.name} - {self.content[:50]} @ {self.timestamp}"
+        return f"{self.media.name} - {self.content[:50]}"
