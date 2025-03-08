@@ -46,7 +46,7 @@ class Credibility(WebsocketConsumer):
     def bias_from_text(self, text: str, media: BiasedMedia) -> Iterator[BiasedContent]:
         blob = TextBlob(text)
         for sentence in blob.sentences:
-            yield BiasedContent(
+            yield BiasedContent.objects.create(
                 media=media,
                 content=sentence.raw,
                 bias_strength=sentence.sentiment.subjectivity,
