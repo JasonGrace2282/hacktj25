@@ -10,7 +10,7 @@ import moviepy
 import yt_dlp
 import easyocr
 import cv2
-# manually installed: easyocr, whisper
+# manually installed: easyocr, openai-whisper
 
 from .models import BiasedContent, BiasedMedia
 from .serializers import BiasedContentSerializer
