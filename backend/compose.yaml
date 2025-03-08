@@ -1,13 +1,11 @@
 # Compose.yaml for BACKEND ONLY
-
-
 services:
   django:
     image: ghcr.io/astral-sh/uv:0.6-python3.13-bookworm-slim
     working_dir: /app
     restart: on-failure
     networks:
-      - hacktj_net
+      - credibly_net
     ports:
       - 8080:8080
     volumes:
@@ -19,31 +17,18 @@ services:
       - /app/manage.py
       - runserver
       - 0.0.0.0:8080
+    environment:
+      UV_LINK_MODE: copy
 
   redis:
-    container_name: hacktj25_redis
     image: redis:latest
     networks:
-      - hacktj25_net
+      - credibly_net
     expose:
       - "6379"
 
-  postgres:
-    container_name: hacktj25_postgres
-    image: postgres:latest
-    networks:
-      - hacktj25_net
-    expose:
-      - "5432"
-    environment:
-      - POSTGRES_USER=hacktj25
-      - POSTGRES_PASSWORD=hacktj25
-    volumes:
-      - hacktj25-pgdata:/var/lib/postgresql/data
-
   celery:
-    container_name: hacktj25_celery
-    image: hacktj25_base
+    image: ghcr.io/astral-sh/uv:0.6-python3.13-bookworm-slim
     entrypoint:
       - uv
       - run
@@ -51,79 +36,23 @@ services:
       - watchfiles
       - --filter
       - python
-      - "uv run celery -A hacktj25 worker"
-      - /hacktj255/manager/hacktj25
-    working_dir: /hacktj255/manager
+      - "uv run celery -A credibly worker"
+      - /app/credibly/apps
+    working_dir: /app
     networks:
-      - hacktj25_net
+      - credibly_net
     volumes:
-      - ../../:/hacktj255
-      - /hacktj255/.venv
+      - .:/app
+      - /app/.venv
     depends_on:
       - redis
-
-  django:
-    container_name: hacktj25_django
-    build:
-      context: ../../
-      dockerfile: ./dev/docker/Dockerfile
-    image: hacktj25_base
-    working_dir: /hacktj255/manager
-    restart: on-failure
-    networks:
-      - hacktj25_net
-    ports:
-      - 8080:8080
-    volumes:
-      - ../../:/hacktj255
-      - ../../docker/storage/:/data
-      - /hacktj255/.venv
-    depends_on:
-      - postgres
-    entrypoint:
-      - "/hacktj255/dev/docker/docker-entrypoint.sh"
-      - "django"
-
-  fastapi:
-    container_name: hacktj25_orchestrator
-    image: hacktj25_base
-    working_dir: /hacktj255/orchestrator
-    stop_grace_period: 1s
-    networks:
-      - hacktj25_net
-    ports:
-      - 8000:8080
-    volumes:
-      - ../../:/hacktj255
-      - ../../docker/storage/:/data
-      - /hacktj255/.venv
-      - /var/run/docker.sock:/var/run/docker.sock
-    entrypoint:
-      - "/hacktj255/dev/docker/docker-entrypoint.sh"
-      - "fastapi"
     environment:
-      PWD_HOST: "${PWD}"
-
-  tailwind:
-    container_name: hacktj25_tailwind
-    image: hacktj25_base
-    stop_grace_period: 1s
-    tty: true
-    networks:
-      - hacktj25_net
-    volumes:
-      - ../../:/hacktj255
-      - /hacktj255/.venv
-    depends_on:
-      - django
-    entrypoint:
-      - "dev/docker/docker-entrypoint.sh"
-      - "tailwind"
+      UV_LINK_MODE: copy
 
 networks:
-  hacktj_net:
+  credibly_net:
     driver: bridge
-    name: hacktj25_net
+    name: credibly_net
 
 volumes:
-  hacktj-pgdata:
+  credibly-pgdata:
