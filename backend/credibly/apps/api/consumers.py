@@ -29,6 +29,7 @@ class Credibility(WebsocketConsumer):
         audio_text = None
         video_text = {}
 
+        video_id = self.url[self.url.index("video/") + 6:]
         print("Starting video processing")
         video_id = yt_dlp.YoutubeDL().extract_info(self.url)["id"]
         temp_video = os.path.join(tempfile.gettempdir(), video_id) + ".mp4"
@@ -38,12 +39,12 @@ class Credibility(WebsocketConsumer):
 
         print("Extracted video info")
         encoded_video = moviepy.VideoFileClip(temp_video)
-        temp_audio = os.path.join(tempfile.gettempdir(), video_id) + ".wav"
-        encoded_video.audio.write_audiofile(temp_audio)
+        temp_audio = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
+        encoded_video.audio.write_audiofile(temp_audio.name)
 
-        print("Transscribing")
+        print("Transcribing")
         with contextlib.redirect_stdout(None):
-            transcribed_audio = audio_model.transcribe(temp_audio)
+            transcribed_audio = audio_model.transcribe(temp_audio.name)
 
             lines = []
 
@@ -79,6 +80,9 @@ class Credibility(WebsocketConsumer):
             self.send(bytes_data=JSONRenderer().render(ser.data))
         media.complete = True
         media.save()
+
+        temp_audio.close()
+        os.remove(temp_video)
         self.close(reason="video processing complete")
 
     def bias_from_text(self, text: str, media: BiasedMedia) -> Iterator[BiasedContent]:

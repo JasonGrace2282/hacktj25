@@ -66,16 +66,36 @@ const connectWebSocket = (url: string) => {
 onMounted(async () => {
   try {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+
     if (tab?.url) {
       const url = new URL(tab.url);
+      let parsedUrl = tab.url;
+
       if (url.hostname.includes('tiktok.com')) {
-        const pathParts = url.pathname.split('/');
-        const username = pathParts.find(part => part.startsWith('@'));
+        let username;
+        if (url.href.includes("tiktok.com/foryou") || url.href.includes("tiktok.com/en")) {
+            username = await waitForElement('[data-e2e="video-author-uniqueid"]');
+            let videoId = await waitForElement(".tiktok-web-player");
+            let id;
+
+            if (username) username = username.textContent;
+            if (videoId) id = videoId.id;
+
+            if (id) {
+              id = id.substring(id.indexOf("-0-") + 3);
+            }
+
+            parsedUrl = `https://www.tiktok.com/@${username}/video/${id}`;
+
+        } else {
+            const pathParts = url.pathname.split('/');
+            username = pathParts.find(part => part.startsWith('@'));
+        }
         currentWebsite.value = username || 'Unknown TikTok user';
       } else {
         currentWebsite.value = url.hostname;
       }
-      connectWebSocket(tab.url);
+      connectWebSocket(parsedUrl);
 
       if (tab.id) {
         chrome.tabs.sendMessage(tab.id, { 
@@ -110,6 +130,24 @@ onUnmounted(() => {
     websocket.value.close();
   }
 });
+
+const waitForElement = (selector: string, timeout = 5000) => {
+    return new Promise<HTMLElement | null>((resolve) => {
+        const startTime = Date.now();
+        const interval = setInterval(() => {
+            const element = document.querySelector(selector);
+            if (element) {
+                clearInterval(interval);
+                resolve(element);
+            }
+            if (Date.now() - startTime > timeout) {
+                clearInterval(interval);
+                resolve(null); // Timeout
+            }
+        }, 500); // Check every 500ms
+    });
+};
+
 </script>
 
 <template>
