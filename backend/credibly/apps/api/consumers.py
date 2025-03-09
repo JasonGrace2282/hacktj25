@@ -33,7 +33,7 @@ class Credibility(WebsocketConsumer):
             audio_text = None
             video_text = {}
 
-            video_id = self.url[self.url.index("video/") + 6:]
+            video_id = self.url[self.url.index("video/") + 6 :]
             print("Starting video processing")
             video_id = yt_dlp.YoutubeDL().extract_info(self.url)["id"]
             temp_video = os.path.join(tempfile.gettempdir(), video_id) + ".mp4"
@@ -52,8 +52,8 @@ class Credibility(WebsocketConsumer):
 
                 lines = []
 
-                for segment in transcribed_audio['segments']:
-                    time_duration = segment['end'] - segment['start']
+                for segment in transcribed_audio["segments"]:
+                    time_duration = segment["end"] - segment["start"]
                     lines.append(f"{time_duration:.2f}s: {segment['text'].strip()}")
 
                 audio_text = "\n".join(lines)
@@ -66,7 +66,9 @@ class Credibility(WebsocketConsumer):
                     if results:
                         video_text[t / int(encoded_video.fps)] = results
 
-                video_text = "\n".join([f"{time}: {line}" for time, line in video_text.items()])
+                video_text = "\n".join(
+                    [f"{time}: {line}" for time, line in video_text.items()]
+                )
 
             if media is None:
                 media = BiasedMedia.objects.create(url=self.url, name=self.name)
@@ -85,19 +87,6 @@ class Credibility(WebsocketConsumer):
         media.save()
 
         self.close(reason="video processing complete")
-
-    def bias_from_text(self, text: str, media: BiasedMedia) -> Iterator[BiasedContent]:
-        print("PREBLOB")
-        blob = TextBlob(text)
-        print("POSTBLOB")
-        for sentence in blob.sentences:
-            content = BiasedContent.objects.create(
-                media=media,
-                content=sentence.raw,
-                bias_strength=sentence.sentiment.subjectivity,
-                accuracy=None,
-            )
-            yield content
 
 
 class GeneralInfo(JsonWebsocketConsumer):
