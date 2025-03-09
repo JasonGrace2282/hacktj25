@@ -132,13 +132,11 @@ def credibility_view(request, url):
     avg_bias = sum([content.bias_strength for content in media_content]) / len(
         media_content
     )
-    
+
     return JsonResponse(
         {
             "average_bias": avg_bias,
-            "contents": JSONRenderer().render(
-                BiasedContentSerializer(media_content, many=True).data
-            ),
+            "contents": BiasedContentSerializer(media_content, many=True).data
         }
     )
 
