@@ -1,13 +1,15 @@
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.renderers import JSONRenderer
+from django.db import models
 
 from .forms import MediaDataForm
-from .serializers import BiasedMediaSerializer
+from .serializers import BiasedMediaSerializer, ContentCreatorSerializer
+from .models import ContentCreator, BiasedMedia
 
 
 @api_view(["GET"])
-def get_video(request, video_url):
+def get_video(request):
     form = MediaDataForm(request.GET)
     if not form.is_valid():
         return JsonResponse(
@@ -16,3 +18,24 @@ def get_video(request, video_url):
     media = form.cleaned_data["media"]
     ser = BiasedMediaSerializer(media)
     return JsonResponse(ser.data)
+
+
+@api_view(["GET"])
+def good_content_creators(request):
+    creators = (
+        ContentCreator.objects.annotate(
+            avg_accuracy=models.Avg("media_set__biased_content__accuracy", default=0)
+        )
+        .filter(avg_accuracy__gte=0.5)
+        .order_by("-avg_accuracy")
+        .all()
+    )
+    media = BiasedMedia.objects.filter(content_creators__in=creators)
+    renderer = JSONRenderer()
+    return JsonResponse(
+        request,
+        {
+            "creators": [renderer.render(ContentCreatorSerializer(creators, many=True).data)],
+            "media": [renderer.render(BiasedMediaSerializer(media, many=True).data)],
+        },
+    )
