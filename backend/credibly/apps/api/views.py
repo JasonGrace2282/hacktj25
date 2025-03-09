@@ -6,6 +6,7 @@ from django.db import models
 from .forms import MediaDataForm
 from .serializers import BiasedMediaSerializer, ContentCreatorSerializer
 from .models import ContentCreator, BiasedMedia
+from .tasks import check_validity_of_info
 
 
 @api_view(["GET"])
@@ -39,3 +40,11 @@ def good_content_creators(request):
             "media": [renderer.render(BiasedMediaSerializer(media, many=True).data)],
         },
     )
+
+
+@api_view(["POST"])
+def start_analysis_of_statements(request, video_url: str):
+    m = BiasedMedia.objects.get(url=video_url)
+    for content in m.biased_content.all():
+        check_validity_of_info.delay(content.id)
+    return JsonResponse({"status": "Analysis started"})

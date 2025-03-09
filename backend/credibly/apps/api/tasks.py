@@ -10,9 +10,10 @@ from .models import BiasedContent
 
 
 @shared_task
-def check_validity_of_info(info: str, content_id: int):
+def check_validity_of_info(content_id: int):
     """Sets the accuracy of the content based on the validity of the info."""
     content = BiasedContent.objects.get(id=content_id)
+    info = content.content
 
     prompt = (
         "{"
