@@ -132,6 +132,7 @@ def credibility_view(request, url):
     avg_bias = sum([content.bias_strength for content in media_content]) / len(
         media_content
     )
+    
     return JsonResponse(
         {
             "average_bias": avg_bias,
@@ -155,4 +156,5 @@ def bias_from_text(text: str, media: BiasedMedia) -> list[BiasedContent]:
             accuracy=None,
         )
         contents.append(content)
+        print(f"{sentence.raw}: {content.bias_strength}")
     return contents

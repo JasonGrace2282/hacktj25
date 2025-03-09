@@ -17,7 +17,7 @@ const getColor = (score: number) => {
   <div class="circle-container">
     <div class="circle" :style="{ borderColor: getColor(credibility) }">
       <span class="credibility" :style="{ color: getColor(credibility) }">{{ credibility }}%</span>
-      <span class="label" :style="{ color: getColor(credibility) }">Credibility</span>
+      <span class="label" :style="{ color: getColor(credibility) }">Biased</span>
     </div>
     
     <div v-if="showDebug && biasStrengths && biasStrengths.length > 0" class="debug-info">
@@ -55,7 +55,7 @@ const getColor = (score: number) => {
 }
 
 .label {
-  font-size: 1rem;
+  font-size: 1.33rem;
   font-weight: 500;
   transition: color 0.3s ease;
 }
