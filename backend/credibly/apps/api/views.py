@@ -71,7 +71,7 @@ def start_analysis_of_statements(request):
 
 
 @api_view(["POST"])
-def credibility_view(request, name, url):
+def credibility_view(request, url):
     media = BiasedMedia.objects.filter(url=url).first()
     if media is not None and media.complete:
         media_content = media.biased_content.all()
@@ -117,7 +117,7 @@ def credibility_view(request, name, url):
             )
 
         if media is None:
-            media = BiasedMedia.objects.create(url=url, name=name)
+            media = BiasedMedia.objects.create(url=url, name="thing")
         media_content = bias_from_text(audio_text, media)
 
         temp_audio.close()
