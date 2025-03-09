@@ -4,6 +4,8 @@ defineProps<{
   description: string;
   status: 'positive' | 'neutral' | 'negative';
   credibilityScore: number;
+  contents?: any[];
+  showContents?: boolean;
 }>();
 
 const getColor = (score: number) => {
@@ -23,6 +25,14 @@ const getColor = (score: number) => {
         </span>
       </div>
       <p>{{ description }}</p>
+      
+      <!-- Display contents if showContents is true and contents exist -->
+      <div v-if="showContents && contents && contents.length > 0" class="content-items">
+        <div v-for="(item, index) in contents" :key="index" class="content-item">
+          <div class="content-text">{{ item.content }}</div>
+          <div class="bias-strength">Bias: {{ (item.bias_strength * 100).toFixed(1) }}%</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -80,5 +90,30 @@ const getColor = (score: number) => {
 
 .indicator.negative {
   color: #d9534f;
+}
+
+.content-items {
+  margin-top: 0.75rem;
+  border-top: 1px solid #3a3a3a;
+  padding-top: 0.75rem;
+}
+
+.content-item {
+  background: #333;
+  border-radius: 4px;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.content-text {
+  color: #ddd;
+  margin-bottom: 0.25rem;
+}
+
+.bias-strength {
+  color: #999;
+  font-size: 0.7rem;
+  text-align: right;
 }
 </style> 

@@ -4,11 +4,12 @@ import CredibilityScore from '@/components/CredibilityScore.vue';
 import InfoCard from '@/components/InfoCard.vue';
 import { ref, onMounted, onUnmounted, watch, computed } from 'vue';
 
-const credibility = ref(30);
+const credibility = ref<number | null>(null);
 const currentWebsite = ref('');
 const currentUrl = ref('');
 const biasStrengths = ref<number[]>([]);
 const isLoading = ref(false);
+const contents = ref<any[]>([]);
 
 // Function to fetch credibility data from the API
 const fetchCredibilityData = async (url: string) => {
@@ -27,6 +28,11 @@ const fetchCredibilityData = async (url: string) => {
     
     const biasStrength = data.average_bias;
     console.log(data.contents)
+    
+    // Sort contents by bias_strength in descending order
+    contents.value = data.contents.sort((a: any, b: any) => b.bias_strength - a.bias_strength);
+    console.log('Sorted contents:', contents.value);
+    
     console.log('Found bias strength:', biasStrength);
     
     // Round to 2 decimal places to ensure maximum 4 digits (e.g., 99.99)
@@ -42,18 +48,19 @@ const fetchCredibilityData = async (url: string) => {
 // Card data with computed property to ensure reactivity
 const cardData = computed(() => [
   {
-    title: 'Fact Checking',
-    description: 'Multiple reliable sources verify the information presented on this site.',
+    title: 'Biased Statements',
     status: 'positive' as const,
-    credibilityScore: credibility.value
+    credibilityScore: credibility.value ?? 0,
+    showContents: true, // Flag to indicate this card should show contents
+    isFactChecking: true, // Flag to identify this as the Fact Checking card
+    description: 'Potentially biased content detected in this article'
   },
-  {
-    title: 'Source History',
-    description: 'This source has a track record of accurate reporting and transparency.',
-    status: 'positive' as const,
-    credibilityScore: credibility.value
-  }
 ]);
+
+// Get the top two contents sorted by bias_strength
+const topContents = computed(() => {
+  return contents.value.slice(0, 2);
+});
 
 const waitForElement = (selector: string, timeout = 5000) => {
   return new Promise<Element | null>((resolve) => {
@@ -147,8 +154,9 @@ const showDebug = ref(false);
         :data-points="biasStrengths.length" 
         :bias-strengths="biasStrengths"
         :show-debug="showDebug"
+        :is-loading="isLoading"
       />
-      <p class="interpretation">
+      <p class="interpretation" v-if="!isLoading && credibility !== null">
         {{ credibility >= 70 ? 'This source appears to be highly credible.' :
            credibility >= 40 ? 'This source has moderate credibility.' :
            'This source may have credibility concerns.' }}
@@ -162,6 +170,8 @@ const showDebug = ref(false);
           :description="card.description"
           :status="card.status"
           :credibility-score="card.credibilityScore"
+          :contents="card.isFactChecking ? topContents : []"
+          :show-contents="card.showContents"
         />
       </div>
       
@@ -170,10 +180,6 @@ const showDebug = ref(false);
         <button class="debug-toggle" @click="showDebug = !showDebug">
           {{ showDebug ? 'Hide Debug' : 'Show Debug' }}
         </button>
-      </div>
-      
-      <div v-if="isLoading" class="loading-indicator">
-        Loading credibility data...
       </div>
     </div>
   </div>
@@ -235,12 +241,5 @@ const showDebug = ref(false);
 
 .debug-toggle:hover {
   color: #ccc;
-}
-
-.loading-indicator {
-  color: #666;
-  font-size: 0.75rem;
-  padding: 0.5rem;
-  font-style: italic;
 }
 </style>

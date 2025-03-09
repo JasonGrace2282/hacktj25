@@ -1,12 +1,14 @@
 <script lang="ts" setup>
 defineProps<{
-    credibility: number;
+    credibility: number | null;
     dataPoints?: number;
     biasStrengths?: number[];
     showDebug?: boolean;
+    isLoading?: boolean;
 }>();
 
-const getColor = (score: number) => {
+const getColor = (score: number | null) => {
+  if (score === null) return '#666';
   if (score >= 70) return '#54bc4a';
   if (score >= 40) return '#f0ad4e';
   return '#d9534f';
@@ -15,9 +17,15 @@ const getColor = (score: number) => {
 
 <template>
   <div class="circle-container">
-    <div class="circle" :style="{ borderColor: getColor(credibility) }">
-      <span class="credibility" :style="{ color: getColor(credibility) }">{{ credibility }}%</span>
-      <span class="label" :style="{ color: getColor(credibility) }">Biased</span>
+    <div class="circle" :class="{ 'loading-circle': isLoading }" :style="{ borderColor: isLoading ? '#666' : getColor(credibility) }">
+      <template v-if="isLoading">
+        <div class="spinner"></div>
+        <!-- No text content during loading -->
+      </template>
+      <template v-else-if="credibility !== null">
+        <span class="credibility" :style="{ color: getColor(credibility) }">{{ credibility }}%</span>
+        <span class="label" :style="{ color: getColor(credibility) }">Biased</span>
+      </template>
     </div>
     
     <div v-if="showDebug && biasStrengths && biasStrengths.length > 0" class="debug-info">
@@ -52,6 +60,23 @@ const getColor = (score: number) => {
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
   gap: 0rem;
   transition: all 0.3s ease;
+}
+
+.loading-circle {
+  border-color: #666 !important;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 .label {
