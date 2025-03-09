@@ -7,6 +7,7 @@ import { ref, onMounted, onUnmounted, watch } from 'vue';
 const credibility = ref(30);
 const currentWebsite = ref('');
 const websocket = ref<WebSocket | null>(null);
+const currentUrl = ref('');
 
 const cardData = [
   {
@@ -60,7 +61,29 @@ const connectWebSocket = (url: string) => {
   websocket.value.onclose = (event) => {
     console.log('WebSocket disconnected:', event.code, event.reason);
     websocket.value = null;
+    
+    if (currentUrl.value) {
+      exitAnalysis(currentUrl.value);
+    }
   };
+};
+
+const exitAnalysis = async (url: string) => {
+  try {
+    console.log('Posting to analysis/videoUrl endpoint:', url);
+    const encodedURI = encodeURIComponent(url);
+    const response = await fetch(`http://localhost:8080/analysis`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ url: encodedURI }),
+    });
+    
+    console.log('POST request to analysis/videoUrl completed');
+  } catch (error) {
+    console.error('Error posting to analysis/videoUrl:', error);
+  }
 };
 
 onMounted(async () => {
@@ -124,7 +147,6 @@ watch(credibility, async (newValue) => {
   }
 });
 
-// Cleanup WebSocket connection when component is unmounted
 onUnmounted(() => {
   if (websocket.value) {
     websocket.value.close();
@@ -155,8 +177,8 @@ const waitForElement = (selector: string, timeout = 5000) => {
     <div class="content">
       <CredibilityScore :credibility="credibility" />
       <p class="interpretation">
-        {{ credibility.value >= 70 ? 'This source appears to be highly credible.' :
-           credibility.value >= 40 ? 'This source has moderate credibility.' :
+        {{ credibility >= 70 ? 'This source appears to be highly credible.' :
+           credibility >= 40 ? 'This source has moderate credibility.' :
            'This source may have credibility concerns.' }}
       </p>
 
