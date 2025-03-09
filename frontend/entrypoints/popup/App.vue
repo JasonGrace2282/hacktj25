@@ -30,7 +30,7 @@ const fetchCredibilityData = async (url: string) => {
     console.log(data.contents)
     
     // Sort contents by bias_strength in descending order
-    contents.value = data.contents.sort((a: any, b: any) => b.bias_strength - a.bias_strength);
+    contents.value = data.contents.sort((a: any, b: any) => b.bias_strength - a.bias_strength).filter((content: any) => content.bias_strength > 0);
     console.log('Sorted contents:', contents.value);
     
     console.log('Found bias strength:', biasStrength);

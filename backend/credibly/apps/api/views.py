@@ -73,12 +73,14 @@ def good_content_creators(request):
 def start_analysis_of_statements(request):
     m = BiasedMedia.objects.get(url=request.POST["video_url"])
     for content in m.biased_content.all():
-        check_validity_of_info(content.id)
-    return JsonResponse({"status": "Analysis started"})
+        check_validity_of_info(content)
+    return JsonResponse(
+        {"contents": BiasedContentSerializer(m.biased_content.all(), many=True).data}
+    )
 
-def check_validity_of_info(id):
+
+def check_validity_of_info(content: BiasedContent):
     """Sets the accuracy of the content based on the validity of the info."""
-    content = BiasedContent.objects.get(id=id)
     info = content.content
 
     prompt = (
@@ -128,9 +130,11 @@ def check_validity_of_info(id):
 
 type zero_to_one = Annotated[float, Field(ge=0, le=1)]
 
+
 class CheckBSResponse(pydantic.BaseModel):
     misinformation_amount: zero_to_one
     certainity: zero_to_one
+
 
 @api_view(["POST"])
 def credibility_view(request, url):
@@ -194,7 +198,7 @@ def credibility_view(request, url):
     return JsonResponse(
         {
             "average_bias": avg_bias,
-            "contents": BiasedContentSerializer(media_content, many=True).data
+            "contents": BiasedContentSerializer(media_content, many=True).data,
         }
     )
 
