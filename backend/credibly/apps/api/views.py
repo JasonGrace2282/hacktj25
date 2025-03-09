@@ -196,7 +196,10 @@ def credibility_view(request, url):
 
         if media is None:
             media = BiasedMedia.objects.create(url=url, name="thing")
-        media_content = bias_from_text(audio_text, media)
+
+        final_text = f"Audio: {audio_text}\n\n\nVideo: {video_text}"
+
+        media_content = bias_from_text(final_text, media)
 
         temp_audio.close()
         os.remove(temp_video)
