@@ -7,9 +7,16 @@ class BiasedContentSerializer(serializers.ModelSerializer):
     class Meta:
         model = BiasedContent
         fields = [
-            "media__name",
             "content",
             "timestamp",
             "accuracy",
             "bias_strength",
         ]
+
+
+class BiasedMediaSerializer(serializers.ModelSerializer):
+    biased_content = BiasedContentSerializer(many=True)
+
+    class Meta:
+        model = BiasedContent
+        fields = ["name", "url", "complete", "biased_content"]
