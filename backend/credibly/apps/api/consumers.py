@@ -26,51 +26,54 @@ class Credibility(WebsocketConsumer):
         self.url = url_kw["url"]
         self.accept()
 
-        audio_text = None
-        video_text = {}
-
-        video_id = self.url[self.url.index("video/") + 6:]
-        print("Starting video processing")
-        video_id = yt_dlp.YoutubeDL().extract_info(self.url)["id"]
-        temp_video = os.path.join(tempfile.gettempdir(), video_id) + ".mp4"
-
-        with yt_dlp.YoutubeDL({"outtmpl": temp_video}) as ydl:
-            ydl.extract_info(self.url, download=True)
-
-        print("Extracted video info")
-        encoded_video = moviepy.VideoFileClip(temp_video)
-        temp_audio = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
-        encoded_video.audio.write_audiofile(temp_audio.name)
-
-        print("Transcribing")
-        with contextlib.redirect_stdout(None):
-            transcribed_audio = audio_model.transcribe(temp_audio.name)
-
-            lines = []
-
-            for segment in transcribed_audio['segments']:
-                time_duration = segment['end'] - segment['start']
-                lines.append(f"{time_duration:.2f}s: {segment['text'].strip()}")
-
-            audio_text = "\n".join(lines)
-
-            for t in range(0, encoded_video.n_frames, int(encoded_video.fps)):
-                frame = encoded_video.get_frame(t)
-                frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-
-                results = reader.readtext(frame, detail=0)
-                if results:
-                    video_text[t / int(encoded_video.fps)] = results
-
-            video_text = "\n".join([f"{time}: {line}" for time, line in video_text.items()])
-
         media = BiasedMedia.objects.filter(url=self.url).first()
         if media is not None and media.complete:
             media_content: Iterator[BiasedContent] = media.biased_content.all()
         else:
+            audio_text = None
+            video_text = {}
+
+            video_id = self.url[self.url.index("video/") + 6:]
+            print("Starting video processing")
+            video_id = yt_dlp.YoutubeDL().extract_info(self.url)["id"]
+            temp_video = os.path.join(tempfile.gettempdir(), video_id) + ".mp4"
+
+            with yt_dlp.YoutubeDL({"outtmpl": temp_video}) as ydl:
+                ydl.extract_info(self.url, download=True)
+
+            print("Extracted video info")
+            encoded_video = moviepy.VideoFileClip(temp_video)
+            temp_audio = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
+            encoded_video.audio.write_audiofile(temp_audio.name)
+
+            print("Transcribing")
+            with contextlib.redirect_stdout(None):
+                transcribed_audio = audio_model.transcribe(temp_audio.name)
+
+                lines = []
+
+                for segment in transcribed_audio['segments']:
+                    time_duration = segment['end'] - segment['start']
+                    lines.append(f"{time_duration:.2f}s: {segment['text'].strip()}")
+
+                audio_text = "\n".join(lines)
+
+                for t in range(0, encoded_video.n_frames, int(encoded_video.fps)):
+                    frame = encoded_video.get_frame(t)
+                    frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+
+                    results = reader.readtext(frame, detail=0)
+                    if results:
+                        video_text[t / int(encoded_video.fps)] = results
+
+                video_text = "\n".join([f"{time}: {line}" for time, line in video_text.items()])
+
             if media is None:
                 media = BiasedMedia.objects.create(url=self.url, name=self.name)
             media_content = self.bias_from_text(audio_text, media)
+
+            temp_audio.close()
+            os.remove(temp_video)
 
         print("FOUND MEDIA CONTENT YIPEEEEEEEEEEEE")
 
@@ -81,8 +84,6 @@ class Credibility(WebsocketConsumer):
         media.complete = True
         media.save()
 
-        temp_audio.close()
-        os.remove(temp_video)
         self.close(reason="video processing complete")
 
     def bias_from_text(self, text: str, media: BiasedMedia) -> Iterator[BiasedContent]:
