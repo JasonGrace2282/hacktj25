@@ -27,6 +27,10 @@ class BiasedContent(models.Model):
         validators=[MinValueValidator(0), MaxValueValidator(1)],
         null=True,
     )
+    accuracy_certainty = models.FloatField(
+        null=True,
+        validators=[MinValueValidator(0), MaxValueValidator(1)],
+    )
 
     bias_strength = models.FloatField(
         validators=[MinValueValidator(0), MaxValueValidator(1)]
