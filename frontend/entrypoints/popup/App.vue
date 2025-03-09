@@ -2,25 +2,62 @@
 
 import CredibilityScore from '@/components/CredibilityScore.vue';
 import InfoCard from '@/components/InfoCard.vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
-const credibility = 30;
+const credibility = ref(30);
 const currentWebsite = ref('');
+const websocket = ref<WebSocket | null>(null);
 
 const cardData = [
   {
     title: 'Fact Checking',
     description: 'Multiple reliable sources verify the information presented on this site.',
     status: 'positive' as const,
-    credibilityScore: credibility
+    credibilityScore: credibility.value
   },
   {
     title: 'Source History',
     description: 'This source has a track record of accurate reporting and transparency.',
     status: 'positive' as const,
-    credibilityScore: credibility
+    credibilityScore: credibility.value
   }
 ];
+
+const connectWebSocket = (url: string) => {
+  if (websocket.value) {
+    websocket.value.close();
+  }
+
+  const encodedUrl = encodeURIComponent(url);
+  const wsUrl = `ws://localhost:8080/ws/extension/credibility/${encodedUrl}`;
+  console.log('Connecting to WebSocket:', wsUrl);
+  
+  websocket.value = new WebSocket(wsUrl);
+
+  websocket.value.onopen = () => {
+    console.log('WebSocket connected');
+  };
+
+  websocket.value.onmessage = (event) => {
+    try {
+      const data = JSON.parse(event.data);
+      if (data.bias_strength !== undefined) {
+        credibility.value = Math.round((1 - data.bias_strength) * 100);
+      }
+    } catch (error) {
+      console.error('Error parsing WebSocket message:', error);
+    }
+  };
+
+  websocket.value.onerror = (error) => {
+    console.error('WebSocket error:', error);
+  };
+
+  websocket.value.onclose = () => {
+    console.log('WebSocket disconnected');
+    websocket.value = null;
+  };
+};
 
 onMounted(async () => {
   try {
@@ -34,10 +71,19 @@ onMounted(async () => {
       } else {
         currentWebsite.value = url.hostname;
       }
+      // Connect to WebSocket with the current URL
+      connectWebSocket(tab.url);
     }
   } catch (error) {
     console.error('Error getting current tab:', error);
     currentWebsite.value = 'Unknown website';
+  }
+});
+
+// Cleanup WebSocket connection when component is unmounted
+onUnmounted(() => {
+  if (websocket.value) {
+    websocket.value.close();
   }
 });
 </script>
@@ -47,8 +93,8 @@ onMounted(async () => {
     <div class="content">
       <CredibilityScore :credibility="credibility" />
       <p class="interpretation">
-        {{ credibility >= 70 ? 'This source appears to be highly credible.' :
-           credibility >= 40 ? 'This source has moderate credibility.' :
+        {{ credibility.value >= 70 ? 'This source appears to be highly credible.' :
+           credibility.value >= 40 ? 'This source has moderate credibility.' :
            'This source may have credibility concerns.' }}
       </p>
 
