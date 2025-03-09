@@ -2,7 +2,7 @@ import os
 import tempfile
 from collections.abc import Iterator
 
-from channels.generic.websocket import WebsocketConsumer
+from channels.generic.websocket import JsonWebsocketConsumer, WebsocketConsumer
 from textblob import TextBlob
 from rest_framework.renderers import JSONRenderer
 import whisper
@@ -10,10 +10,9 @@ import moviepy
 import yt_dlp
 import easyocr
 import cv2
-# manually installed: easyocr, openai-whisper
 
 from .models import BiasedContent, BiasedMedia
-from .serializers import BiasedContentSerializer
+from .serializers import BiasedContentSerializer, BiasedMediaSerializer
 from .tasks import check_validity_of_info
 
 reader = easyocr.Reader(["en"])
@@ -88,3 +87,13 @@ class Credibility(WebsocketConsumer):
             )
             check_validity_of_info.delay(sentence.raw, content.id)
             yield content
+
+
+class GeneralInfo(JsonWebsocketConsumer):
+    def receive_json(self, json_data):
+        data = json_data.get("url")
+        if data is None:
+            return
+        media = BiasedMedia.objects.get(url=data)
+        ser = BiasedMediaSerializer(media)
+        self.send_json(JSONRenderer().render(ser.data))
