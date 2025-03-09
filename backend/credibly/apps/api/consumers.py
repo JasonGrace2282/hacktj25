@@ -27,7 +27,7 @@ class Credibility(WebsocketConsumer):
         self.accept()
 
         audio_text = None
-        video_text = []
+        video_text = {}
 
         # Initialize whisper model when needed
         audio_model = whisper.load_model("base")
@@ -44,15 +44,23 @@ class Credibility(WebsocketConsumer):
 
         transcribed_audio = audio_model.transcribe(temp_audio)
 
-        audio_text = transcribed_audio
+        lines = []
 
-        for t in range(0, encoded_video.n_frames, encoded_video.fps):
+        for segment in transcribed_audio['segments']:
+            time_duration = segment['end'] - segment['start']
+            lines.append(f"{time_duration:.2f}s: {segment['text'].strip()}")
+
+        audio_text = "\n".join(lines)
+
+        for t in range(0, encoded_video.n_frames, int(encoded_video.fps)):
             frame = encoded_video.get_frame(t)
             frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
 
             results = reader.readtext(frame, detail=0)
             if results:
-                video_text.append((t / encoded_video.fps, results))
+                video_text[t / int(encoded_video.fps)] = results
+
+        video_text = "\n".join([f"{time}: {line}" for time, line in video_text.items()])
 
         media = BiasedMedia.objects.filter(url=self.url).first()
         if media is not None and media.complete:

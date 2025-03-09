@@ -138,12 +138,11 @@ AUTH_USER_MODEL = "users.User"
 
 
 ASGI_APPLICATION = "credibly.asgi.application"
+
+# Channel layer settings
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("redis", 6379)],  # Use redis service name from Docker Compose
-        },
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
     },
 }
 

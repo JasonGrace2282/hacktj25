@@ -25,24 +25,28 @@ const cardData = [
 
 const connectWebSocket = (url: string) => {
   if (websocket.value) {
+    console.log('Closing existing WebSocket connection');
     websocket.value.close();
   }
 
   const encodedUrl = encodeURIComponent(url);
-  const wsUrl = `ws://localhost:8080/ws/extension/credibility/${encodedUrl}`;
-  console.log('Connecting to WebSocket:', wsUrl);
+  const wsUrl = `ws://localhost:8080/ws/thingy/credibility/${encodedUrl}`;
+  console.log('Attempting to connect to WebSocket:', wsUrl);
   
   websocket.value = new WebSocket(wsUrl);
 
   websocket.value.onopen = () => {
-    console.log('WebSocket connected');
+    console.log('WebSocket connection established successfully');
   };
 
   websocket.value.onmessage = (event) => {
+    console.log('WebSocket message received:', event.data);
     try {
       const data = JSON.parse(event.data);
+      console.log('Parsed WebSocket data:', data);
       if (data.bias_strength !== undefined) {
         credibility.value = Math.round((1 - data.bias_strength) * 100);
+        console.log('Updated credibility score:', credibility.value);
       }
     } catch (error) {
       console.error('Error parsing WebSocket message:', error);
@@ -53,8 +57,8 @@ const connectWebSocket = (url: string) => {
     console.error('WebSocket error:', error);
   };
 
-  websocket.value.onclose = () => {
-    console.log('WebSocket disconnected');
+  websocket.value.onclose = (event) => {
+    console.log('WebSocket disconnected:', event.code, event.reason);
     websocket.value = null;
   };
 };
@@ -71,10 +75,8 @@ onMounted(async () => {
       } else {
         currentWebsite.value = url.hostname;
       }
-      // Connect to WebSocket with the current URL
       connectWebSocket(tab.url);
 
-      // Send initial credibility score to content script
       if (tab.id) {
         chrome.tabs.sendMessage(tab.id, { 
           type: 'credibilityUpdate',
@@ -88,7 +90,6 @@ onMounted(async () => {
   }
 });
 
-// Watch for credibility changes and send updates to content script
 watch(credibility, async (newValue) => {
   try {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
