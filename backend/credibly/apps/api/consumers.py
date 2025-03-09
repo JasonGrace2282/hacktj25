@@ -60,7 +60,7 @@ class Credibility(WebsocketConsumer):
         else:
             if media is None:
                 media = BiasedMedia.objects.create(url=self.url, name=self.name)
-            media_content = self.find_biased_content(audio_text, media)
+            media_content = self.bias_from_text(audio_text, media)
 
         for content in media_content:
             ser = BiasedContentSerializer(content)
@@ -68,11 +68,6 @@ class Credibility(WebsocketConsumer):
         media.complete = True
         media.save()
         self.close(reason="video processing complete")
-
-    def find_biased_content(
-        self, text: str, media: BiasedMedia
-    ) -> Iterator[BiasedContent]:
-        yield from self.bias_from_text(text, media)
 
     def bias_from_text(self, text: str, media: BiasedMedia) -> Iterator[BiasedContent]:
         blob = TextBlob(text)
