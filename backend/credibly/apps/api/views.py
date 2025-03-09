@@ -4,6 +4,7 @@ import tempfile
 from pydantic import Field
 from typing import Annotated
 import pydantic
+import threading
 import whisper
 import moviepy
 import yt_dlp
@@ -73,8 +74,14 @@ def good_content_creators(request):
 def start_analysis_of_statements(request, url):
     m = BiasedMedia.objects.get(url=url)
     contents = m.biased_content.all()
+    threads = []
     for content in contents:
-        check_validity_of_info(content)
+        thread = threading.Thread(target=check_validity_of_info, args=(content,))
+        threads.append(thread)
+        thread.start()
+
+    for thread in threads:
+        thread.join()
 
     return JsonResponse(
         {
