@@ -2,7 +2,9 @@ import contextlib
 import os
 import tempfile
 from collections.abc import Iterator
-
+from dataclasses import Field
+from typing import Annotated
+import django
 import whisper
 import moviepy
 import yt_dlp
@@ -72,7 +74,7 @@ def good_content_creators(request):
 def start_analysis_of_statements(request):
     m = BiasedMedia.objects.get(url=request.POST["video_url"])
     for content in m.biased_content.all():
-        check_validity_of_info(content_id)
+        check_validity_of_info(content.id)
     return JsonResponse({"status": "Analysis started"})
 
 def check_validity_of_info(id):
@@ -127,7 +129,7 @@ def check_validity_of_info(id):
 
 type zero_to_one = Annotated[float, Field(ge=0, le=1)]
 
-class CheckBSResponse(BaseModel):
+class CheckBSResponse(django.model.BaseModel):
     misinformation_amount: zero_to_one
     certainity: zero_to_one
 
