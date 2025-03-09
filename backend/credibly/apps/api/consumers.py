@@ -53,8 +53,7 @@ class Credibility(WebsocketConsumer):
                 lines = []
 
                 for segment in transcribed_audio["segments"]:
-                    time_duration = segment["end"] - segment["start"]
-                    lines.append(f"{time_duration:.2f}s: {segment['text'].strip()}")
+                    lines.append(f"{segment["start"]}-{segment["end"]}: {segment['text'].strip()}")
 
                 audio_text = "\n".join(lines)
 
