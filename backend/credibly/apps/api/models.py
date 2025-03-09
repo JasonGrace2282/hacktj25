@@ -7,7 +7,12 @@ class BiasedMedia(models.Model):
     url = models.URLField(unique=True)
     complete = models.BooleanField(default=False)
 
-    media = models.ForeignKey("ContentCreator", related_name="media_set", on_delete=models.CASCADE)
+    creator = models.ForeignKey(
+        "ContentCreator",
+        related_name="media_set",
+        on_delete=models.CASCADE,
+        null=True,
+    )
 
     objects = models.Manager()
 
@@ -40,7 +45,6 @@ class BiasedContent(models.Model):
 
     def __str__(self) -> str:
         return f"{self.media.name} - {self.content[:50]}"
-
 
 
 class ContentCreator(models.Model):

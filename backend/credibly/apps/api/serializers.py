@@ -8,7 +8,6 @@ class BiasedContentSerializer(serializers.ModelSerializer):
         model = BiasedContent
         fields = [
             "content",
-            "timestamp",
             "accuracy",
             "bias_strength",
         ]
