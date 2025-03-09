@@ -70,14 +70,8 @@ def good_content_creators(request):
 
 
 @api_view(["POST"])
-def start_analysis_of_statements(request):
-    form = MediaDataForm(request.POST)
-    if not form.is_valid():
-        return JsonResponse(
-            {"error": "Invalid data", "errors": form.errors.as_json()},
-            status=400,
-        )
-    m = form.cleaned_data["media"]
+def start_analysis_of_statements(request, url):
+    m = BiasedMedia.objects.get(url=url)
     contents = m.biased_content.all()
     for content in contents:
         check_validity_of_info(content)
