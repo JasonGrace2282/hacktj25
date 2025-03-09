@@ -26,6 +26,7 @@ const fetchCredibilityData = async (url: string) => {
     console.log('Received credibility data:', data);
     
     const biasStrength = data.average_bias;
+    console.log(data.contents)
     console.log('Found bias strength:', biasStrength);
     
     // Round to 2 decimal places to ensure maximum 4 digits (e.g., 99.99)
@@ -104,38 +105,8 @@ onMounted(async () => {
       }
       
       currentUrl.value = parsedUrl;
-      
-      // Create the BiasedMedia object
-      try {
-        const createResponse = await fetch(`http://localhost:8080/api/biased-media/`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ 
-            url: parsedUrl,
-            title: currentWebsite.value,
-            source_type: parsedUrl.includes('tiktok.com') ? 'tiktok' : 'website'
-          }),
-        });
-        
-        if (createResponse.ok) {
-          console.log('Successfully created BiasedMedia object on startup');
-          
-          // After creating the BiasedMedia object, fetch credibility data
-          await fetchCredibilityData(parsedUrl);
-        } else {
-          console.warn('Could not create BiasedMedia object on startup, status:', createResponse.status);
-          
-          // Try to fetch credibility data anyway, as the object might already exist
-          await fetchCredibilityData(parsedUrl);
-        }
-      } catch (createError) {
-        console.error('Error creating BiasedMedia object on startup:', createError);
-        
-        // Try to fetch credibility data anyway
-        await fetchCredibilityData(parsedUrl);
-      }
+
+      await fetchCredibilityData(parsedUrl);
 
       if (tab.id) {
         chrome.tabs.sendMessage(tab.id, { 
