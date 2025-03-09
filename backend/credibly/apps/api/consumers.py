@@ -58,12 +58,15 @@ class Credibility(WebsocketConsumer):
         if media is not None and media.complete:
             media_content: Iterator[BiasedContent] = media.biased_content.all()
         else:
-            media = BiasedMedia.objects.create(url=self.url, name=self.name)
+            if media is None:
+                media = BiasedMedia.objects.create(url=self.url, name=self.name)
             media_content = self.find_biased_content(audio_text, media)
 
         for content in media_content:
             ser = BiasedContentSerializer(content)
             self.send(bytes_data=JSONRenderer().render(ser.data))
+        media.complete = True
+        media.save()
         self.close(reason="video processing complete")
 
     def find_biased_content(
