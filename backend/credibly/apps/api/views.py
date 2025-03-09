@@ -1,10 +1,9 @@
 import contextlib
 import os
 import tempfile
-from collections.abc import Iterator
-from dataclasses import Field
+from pydantic import Field
 from typing import Annotated
-import django
+import pydantic
 import whisper
 import moviepy
 import yt_dlp
@@ -129,7 +128,7 @@ def check_validity_of_info(id):
 
 type zero_to_one = Annotated[float, Field(ge=0, le=1)]
 
-class CheckBSResponse(django.model.BaseModel):
+class CheckBSResponse(pydantic.BaseModel):
     misinformation_amount: zero_to_one
     certainity: zero_to_one
 
