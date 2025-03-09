@@ -72,9 +72,10 @@ def good_content_creators(request):
 @api_view(["POST"])
 def start_analysis_of_statements(request, url):
     m = BiasedMedia.objects.get(url=url)
-    contents = m.biased_content.all()
-    for content in contents:
-        check_validity_of_info(content)
+    if not m.biased_content.exclude(activity__isnull=True).exists():
+        for content in m.biased_content.all():
+            check_validity_of_info(content)
+    contents = m.biased_content.filter(accuracy__isnull=False).all()
 
     return JsonResponse(
         {
