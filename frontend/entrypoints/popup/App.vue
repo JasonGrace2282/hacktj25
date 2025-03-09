@@ -2,7 +2,7 @@
 
 import CredibilityScore from '@/components/CredibilityScore.vue';
 import InfoCard from '@/components/InfoCard.vue';
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 
 const credibility = ref(30);
 const currentWebsite = ref('');
@@ -73,10 +73,33 @@ onMounted(async () => {
       }
       // Connect to WebSocket with the current URL
       connectWebSocket(tab.url);
+
+      // Send initial credibility score to content script
+      if (tab.id) {
+        chrome.tabs.sendMessage(tab.id, { 
+          type: 'credibilityUpdate',
+          credibility: credibility.value 
+        });
+      }
     }
   } catch (error) {
     console.error('Error getting current tab:', error);
     currentWebsite.value = 'Unknown website';
+  }
+});
+
+// Watch for credibility changes and send updates to content script
+watch(credibility, async (newValue) => {
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (tab?.id) {
+      chrome.tabs.sendMessage(tab.id, {
+        type: 'credibilityUpdate',
+        credibility: newValue
+      });
+    }
+  } catch (error) {
+    console.error('Error sending credibility update:', error);
   }
 });
 

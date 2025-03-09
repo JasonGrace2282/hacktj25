@@ -24,6 +24,7 @@ dependencies = [
     "asttokens>=3.0.0",
     "easyocr>=1.7.2",
     "openai-whisper",
+    "setuptools-rust>=1.10.2",
 ]
 
 [dependency-groups]
