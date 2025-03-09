@@ -16,6 +16,7 @@ from .serializers import BiasedContentSerializer, BiasedMediaSerializer
 from .tasks import check_validity_of_info
 
 reader = easyocr.Reader(["en"])
+audio_model = whisper.load_model("base")
 
 
 class Credibility(WebsocketConsumer):
@@ -27,9 +28,6 @@ class Credibility(WebsocketConsumer):
 
         audio_text = None
         video_text = {}
-
-        # Initialize whisper model when needed
-        audio_model = whisper.load_model("base")
 
         video_id = yt_dlp.YoutubeDL().extract_info(self.url)["id"]
         temp_video = os.path.join(tempfile.gettempdir(), video_id) + ".mp4"
