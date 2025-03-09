@@ -43,8 +43,8 @@ def good_content_creators(request):
 
 
 @api_view(["POST"])
-def start_analysis_of_statements(request, video_url: str):
-    m = BiasedMedia.objects.get(url=video_url)
+def start_analysis_of_statements(request):
+    m = BiasedMedia.objects.get(url=request.POST["video_url"])
     for content in m.biased_content.all():
         check_validity_of_info.delay(content.id)
     return JsonResponse({"status": "Analysis started"})
