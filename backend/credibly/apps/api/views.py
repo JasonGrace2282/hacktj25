@@ -72,10 +72,15 @@ def good_content_creators(request):
 @api_view(["POST"])
 def start_analysis_of_statements(request):
     m = BiasedMedia.objects.get(url=request.POST["video_url"])
-    for content in m.biased_content.all():
+    contents = m.biased_content.all()
+    for content in contents:
         check_validity_of_info(content)
+
     return JsonResponse(
-        {"contents": BiasedContentSerializer(m.biased_content.all(), many=True).data}
+        {
+            "contents": BiasedContentSerializer(m.biased_content.all(), many=True).data,
+            "average_misinformation": 1 - sum(contents) / len(contents),
+        }
     )
 
 
