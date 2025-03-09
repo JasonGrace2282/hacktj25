@@ -21,9 +21,14 @@ dependencies = [
     "babel>=2.17.0",
     "async-lru>=2.0.4",
     "asttokens>=3.0.0",
+    "easyocr>=1.7.2",
+    "openai-whisper",
 ]
 
 [dependency-groups]
 dev = [
     "watchfiles>=1.0.4",
 ]
+
+[tool.uv.sources]
+openai-whisper = { git = "https://github.com/openai/whisper.git" }
