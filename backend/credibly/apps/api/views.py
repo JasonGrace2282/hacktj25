@@ -18,7 +18,11 @@ from textblob import TextBlob
 
 from .models import BiasedContent
 from .forms import MediaDataForm
-from .serializers import BiasedMediaSerializer, ContentCreatorSerializer
+from .serializers import (
+    BiasedContentSerializer,
+    BiasedMediaSerializer,
+    ContentCreatorSerializer,
+)
 from .models import ContentCreator, BiasedMedia
 from .tasks import check_validity_of_info
 
@@ -128,7 +132,14 @@ def credibility_view(request, url):
     avg_bias = sum([content.bias_strength for content in media_content]) / len(
         media_content
     )
-    return JsonResponse(request, {"average_bias": avg_bias})
+    return JsonResponse(
+        {
+            "average_bias": avg_bias,
+            "contents": JSONRenderer().render(
+                BiasedContentSerializer(media_content, many=True).data
+            ),
+        }
+    )
 
 
 def bias_from_text(text: str, media: BiasedMedia) -> list[BiasedContent]:
