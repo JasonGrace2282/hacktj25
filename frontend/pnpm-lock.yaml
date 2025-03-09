@@ -17,14 +17,10 @@ importers:
         version: 0.0.280
       '@wxt-dev/module-vue':
         specifier: ^1.0.1
-<<<<<<< HEAD
-        version: 1.0.2(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2))(vue@3.5.13(typescript@5.6.3))(wxt@0.19.29(@types/node@22.13.10)(rollup@4.35.0))
-=======
         version: 1.0.2(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.2))(vue@3.5.13(typescript@5.6.3))(wxt@0.19.29(@types/node@22.13.10)(lightningcss@1.29.2)(rollup@4.35.0))
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.5.3)
->>>>>>> c6da4c4 (progress)
       typescript:
         specifier: 5.6.3
         version: 5.6.3
@@ -33,11 +29,7 @@ importers:
         version: 2.2.8(typescript@5.6.3)
       wxt:
         specifier: ^0.19.29
-<<<<<<< HEAD
-        version: 0.19.29(@types/node@22.13.10)(rollup@4.35.0)
-=======
         version: 0.19.29(@types/node@22.13.10)(lightningcss@1.29.2)(rollup@4.35.0)
->>>>>>> c6da4c4 (progress)
 
 packages:
 
@@ -540,8 +532,6 @@ packages:
     resolution: {integrity: sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==}
     engines: {node: '>= 4.0.0'}
 
-<<<<<<< HEAD
-=======
   autoprefixer@10.4.20:
     resolution: {integrity: sha512-XY25y5xSv/wEoqzDyXXME4AFfkZI0P23z6Fs3YgymDnKJkCGOnkL0iTxCa85UTqaSgfcqyf3UA6+c7wUvx/16g==}
     engines: {node: ^10 || ^12 || >=14}
@@ -549,7 +539,6 @@ packages:
     peerDependencies:
       postcss: ^8.1.0
 
->>>>>>> c6da4c4 (progress)
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
@@ -587,14 +576,11 @@ packages:
     resolution: {integrity: sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==}
     engines: {node: '>=8'}
 
-<<<<<<< HEAD
-=======
   browserslist@4.24.4:
     resolution: {integrity: sha512-KDi1Ny1gSePi1vm0q4oxSF8b4DR44GF4BbmS2YdhPLOEqd8pDviZOGH/GsmRwoWJ2+5Lr085X7naowMwKHDG1A==}
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
 
->>>>>>> c6da4c4 (progress)
   buffer-crc32@0.2.13:
     resolution: {integrity: sha512-VO9Ht/+p3SN7SKWqcrgEzjGbRSJYTx+Q1pTQC0wrWqHx0vpJraQ6GtHx8tvcg1rlK1byhU5gccxgOgj7B0TDkQ==}
 
@@ -641,12 +627,9 @@ packages:
     resolution: {integrity: sha512-xlx1yCK2Oc1APsPXDL2LdlNP6+uu8OCDdhOBSVT279M/S+y75O30C2VuD8T2ogdePBBl7PfPF4504tnLgX3zfw==}
     engines: {node: '>=14.16'}
 
-<<<<<<< HEAD
-=======
   caniuse-lite@1.0.30001702:
     resolution: {integrity: sha512-LoPe/D7zioC0REI5W73PeR1e1MLCipRGq/VkovJnd6Df+QVqT+vT33OXCp8QUd7kA7RZrHWxb1B36OQKI/0gOA==}
 
->>>>>>> c6da4c4 (progress)
   chalk@4.1.2:
     resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
     engines: {node: '>=10'}
@@ -862,13 +845,10 @@ packages:
   destr@2.0.3:
     resolution: {integrity: sha512-2N3BOUU4gYMpTP24s5rF5iP7BDr7uNTCs4ozw3kf/eKfvWSIu93GEBi5m427YoyJoeOzQ5smuu4nNAPGb8idSQ==}
 
-<<<<<<< HEAD
-=======
   detect-libc@2.0.3:
     resolution: {integrity: sha512-bwy0MGW55bG41VqxxypOsdSdGqLwXPI/focwgTYCFMbdUiBAxLg9CFzG08sz2aqzknwiX7Hkl0bQENjg8iLByw==}
     engines: {node: '>=8'}
 
->>>>>>> c6da4c4 (progress)
   dom-serializer@2.0.0:
     resolution: {integrity: sha512-wIkAryiqt/nV5EQKqQpo3SToSOV9J0DnbJqwK7Wv/Trc92zIAYZ4FlMu+JPFW1DfGFt81ZTCGgDEabffXeLyJg==}
 
@@ -901,12 +881,9 @@ packages:
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
 
-<<<<<<< HEAD
-=======
   electron-to-chromium@1.5.113:
     resolution: {integrity: sha512-wjT2O4hX+wdWPJ76gWSkMhcHAV2PTMX+QetUCPYEdCIe+cxmgzzSSiGRCKW8nuh4mwKZlpv0xvoW7OF2X+wmHg==}
 
->>>>>>> c6da4c4 (progress)
   emoji-regex@10.4.0:
     resolution: {integrity: sha512-EC+0oUMY1Rqm4O6LLrgjtYDvcVYTy7chDnM4Q7030tP4Kwj3u/pR6gP9ygnp2CJMK5Gq+9Q2oqmrFJAz01DXjw==}
 
@@ -1020,12 +997,9 @@ packages:
     resolution: {integrity: sha512-8e1++BCiTzUno9v5IZ2J6bv4RU+3UKDmqWUQD0MIMVCd9AdhWkO1gw57oo1mNEX1dMq2EGI+FbWz4B92pscSQg==}
     engines: {node: '>= 18'}
 
-<<<<<<< HEAD
-=======
   fraction.js@4.3.7:
     resolution: {integrity: sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==}
 
->>>>>>> c6da4c4 (progress)
   fs-extra@11.2.0:
     resolution: {integrity: sha512-PmDi3uwK5nFuXh7XDTlVnS17xJS7vW36is2+w3xcv8SVxiB4NyATf4ctkVY5bkSjX0Y4nbvZCq1/EjtEyr9ktw==}
     engines: {node: '>=14.14'}
@@ -1361,8 +1335,6 @@ packages:
   lighthouse-logger@2.0.1:
     resolution: {integrity: sha512-ioBrW3s2i97noEmnXxmUq7cjIcVRjT5HBpAYy8zE11CxU9HqlWHHeRxfeN1tn8F7OEMVPIC9x1f8t3Z7US9ehQ==}
 
-<<<<<<< HEAD
-=======
   lightningcss-darwin-arm64@1.29.2:
     resolution: {integrity: sha512-cK/eMabSViKn/PG8U/a7aCorpeKLMlK0bQeNHmdb7qUnBkNPnL+oV5DjJUo0kqWsJUapZsM4jCfYItbqBDvlcA==}
     engines: {node: '>= 12.0.0'}
@@ -1427,7 +1399,6 @@ packages:
     resolution: {integrity: sha512-6b6gd/RUXKaw5keVdSEtqFVdzWnU5jMxTUjA2bVcMNPLwSQ08Sv/UodBVtETLCn7k4S1Ibxwh7k68IwLZPgKaA==}
     engines: {node: '>= 12.0.0'}
 
->>>>>>> c6da4c4 (progress)
   lines-and-columns@2.0.4:
     resolution: {integrity: sha512-wM1+Z03eypVAVUCE7QdSqpVIvelbOakn1M0bPDoA4SGWPx3sNDVUiMo3L6To6WWGClB7VyXnhQ4Sn7gxiJbE6A==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
@@ -1609,23 +1580,17 @@ packages:
   node-notifier@10.0.1:
     resolution: {integrity: sha512-YX7TSyDukOZ0g+gmzjB6abKu+hTGvO8+8+gIFDsRCU2t8fLV/P2unmt+LGFaIa4y64aX98Qksa97rgz4vMNeLQ==}
 
-<<<<<<< HEAD
-=======
   node-releases@2.0.19:
     resolution: {integrity: sha512-xxOWJsBKtzAq7DY0J+DTzuz58K8e7sJbdgwkbMWQe8UYB6ekmsQ45q0M/tJDsGaZmbC+l7n57UV8Hl5tHxO9uw==}
 
->>>>>>> c6da4c4 (progress)
   normalize-path@3.0.0:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
     engines: {node: '>=0.10.0'}
 
-<<<<<<< HEAD
-=======
   normalize-range@0.1.2:
     resolution: {integrity: sha512-bdok/XvKII3nUpklnV6P2hxtMNrCboOjAcyBuQnWEhO665FwrSNRxU+AqpsyvO6LgGYPspN+lu5CLtw4jPRKNA==}
     engines: {node: '>=0.10.0'}
 
->>>>>>> c6da4c4 (progress)
   normalize-url@8.0.1:
     resolution: {integrity: sha512-IO9QvjUMWxPQQhs60oOu10CRkWCiZzSUkzbXGGV9pviYl1fXYcvkzQ5jV9z8Y6un8ARoVRl4EtC6v6jNqbaJ/w==}
     engines: {node: '>=14.16'}
@@ -1776,12 +1741,9 @@ packages:
   pkg-types@2.1.0:
     resolution: {integrity: sha512-wmJwA+8ihJixSoHKxZJRBQG1oY8Yr9pGLzRmSsNms0iNWyHHAlZCa7mmKiFR10YPZuz/2k169JiS/inOjBCZ2A==}
 
-<<<<<<< HEAD
-=======
   postcss-value-parser@4.2.0:
     resolution: {integrity: sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==}
 
->>>>>>> c6da4c4 (progress)
   postcss@8.5.3:
     resolution: {integrity: sha512-dle9A3yYxlBSrt8Fu+IpjGT8SY8hN0mlaA6GY8t0P5PjIOZemULz/E2Bnm/2dcUOena75OTNkHI76uZBNUUq3A==}
     engines: {node: ^10 || ^12 || >=14}
@@ -2130,15 +2092,12 @@ packages:
     resolution: {integrity: sha512-KK8xQ1mkzZeg9inewmFVDNkg3l5LUhoq9kN6iWYB/CC9YMG8HA+c1Q8HwDe6dEX7kErrEVNVBO3fWsVq5iDgtw==}
     engines: {node: '>=8'}
 
-<<<<<<< HEAD
-=======
   update-browserslist-db@1.1.3:
     resolution: {integrity: sha512-UxhIZQ+QInVdunkDAaiazvvT/+fXL5Osr0JZlJulepYu6Jd7qJtDZjlur0emRlT71EN3ScPoE7gvsuIKKNavKw==}
     hasBin: true
     peerDependencies:
       browserslist: '>= 4.21.0'
 
->>>>>>> c6da4c4 (progress)
   update-notifier@6.0.2:
     resolution: {integrity: sha512-EDxhTEVPZZRLWYcJ4ZXjGFN0oP7qYvbXWzEgRm/Yql4dHX5wDbvh89YHP6PK1lzZJYrMtXUuZZz8XGK+U6U1og==}
     engines: {node: '>=14.16'}
@@ -2583,15 +2542,9 @@ snapshots:
       '@types/node': 22.13.10
     optional: true
 
-<<<<<<< HEAD
-  '@vitejs/plugin-vue@5.2.1(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2))(vue@3.5.13(typescript@5.6.3))':
-    dependencies:
-      vite: 6.2.1(@types/node@22.13.10)(jiti@2.4.2)
-=======
   '@vitejs/plugin-vue@5.2.1(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.2))(vue@3.5.13(typescript@5.6.3))':
     dependencies:
       vite: 6.2.1(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.2)
->>>>>>> c6da4c4 (progress)
       vue: 3.5.13(typescript@5.6.3)
 
   '@volar/language-core@2.4.12':
@@ -2688,17 +2641,10 @@ snapshots:
 
   '@webext-core/match-patterns@1.0.3': {}
 
-<<<<<<< HEAD
-  '@wxt-dev/module-vue@1.0.2(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2))(vue@3.5.13(typescript@5.6.3))(wxt@0.19.29(@types/node@22.13.10)(rollup@4.35.0))':
-    dependencies:
-      '@vitejs/plugin-vue': 5.2.1(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2))(vue@3.5.13(typescript@5.6.3))
-      wxt: 0.19.29(@types/node@22.13.10)(rollup@4.35.0)
-=======
   '@wxt-dev/module-vue@1.0.2(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.2))(vue@3.5.13(typescript@5.6.3))(wxt@0.19.29(@types/node@22.13.10)(lightningcss@1.29.2)(rollup@4.35.0))':
     dependencies:
       '@vitejs/plugin-vue': 5.2.1(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.2))(vue@3.5.13(typescript@5.6.3))
       wxt: 0.19.29(@types/node@22.13.10)(lightningcss@1.29.2)(rollup@4.35.0)
->>>>>>> c6da4c4 (progress)
     transitivePeerDependencies:
       - vite
       - vue
@@ -2746,8 +2692,6 @@ snapshots:
 
   at-least-node@1.0.0: {}
 
-<<<<<<< HEAD
-=======
   autoprefixer@10.4.20(postcss@8.5.3):
     dependencies:
       browserslist: 4.24.4
@@ -2758,7 +2702,6 @@ snapshots:
       postcss: 8.5.3
       postcss-value-parser: 4.2.0
 
->>>>>>> c6da4c4 (progress)
   balanced-match@1.0.2: {}
 
   base64-js@1.5.1: {}
@@ -2803,8 +2746,6 @@ snapshots:
     dependencies:
       fill-range: 7.1.1
 
-<<<<<<< HEAD
-=======
   browserslist@4.24.4:
     dependencies:
       caniuse-lite: 1.0.30001702
@@ -2812,7 +2753,6 @@ snapshots:
       node-releases: 2.0.19
       update-browserslist-db: 1.1.3(browserslist@4.24.4)
 
->>>>>>> c6da4c4 (progress)
   buffer-crc32@0.2.13: {}
 
   buffer-from@1.1.2: {}
@@ -2870,11 +2810,8 @@ snapshots:
 
   camelcase@7.0.1: {}
 
-<<<<<<< HEAD
-=======
   caniuse-lite@1.0.30001702: {}
 
->>>>>>> c6da4c4 (progress)
   chalk@4.1.2:
     dependencies:
       ansi-styles: 4.3.0
@@ -3070,12 +3007,9 @@ snapshots:
 
   destr@2.0.3: {}
 
-<<<<<<< HEAD
-=======
   detect-libc@2.0.3:
     optional: true
 
->>>>>>> c6da4c4 (progress)
   dom-serializer@2.0.0:
     dependencies:
       domelementtype: 2.3.0
@@ -3111,11 +3045,8 @@ snapshots:
 
   eastasianwidth@0.2.0: {}
 
-<<<<<<< HEAD
-=======
   electron-to-chromium@1.5.113: {}
 
->>>>>>> c6da4c4 (progress)
   emoji-regex@10.4.0: {}
 
   emoji-regex@8.0.0: {}
@@ -3266,11 +3197,8 @@ snapshots:
 
   formdata-node@6.0.3: {}
 
-<<<<<<< HEAD
-=======
   fraction.js@4.3.7: {}
 
->>>>>>> c6da4c4 (progress)
   fs-extra@11.2.0:
     dependencies:
       graceful-fs: 4.2.11
@@ -3565,8 +3493,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-<<<<<<< HEAD
-=======
   lightningcss-darwin-arm64@1.29.2:
     optional: true
 
@@ -3613,7 +3539,6 @@ snapshots:
       lightningcss-win32-x64-msvc: 1.29.2
     optional: true
 
->>>>>>> c6da4c4 (progress)
   lines-and-columns@2.0.4: {}
 
   linkedom@0.18.9:
@@ -3795,17 +3720,12 @@ snapshots:
       uuid: 8.3.2
       which: 2.0.2
 
-<<<<<<< HEAD
-  normalize-path@3.0.0: {}
-
-=======
   node-releases@2.0.19: {}
 
   normalize-path@3.0.0: {}
 
   normalize-range@0.1.2: {}
 
->>>>>>> c6da4c4 (progress)
   normalize-url@8.0.1: {}
 
   npm-run-path@4.0.1:
@@ -3982,11 +3902,8 @@ snapshots:
       exsolve: 1.0.4
       pathe: 2.0.3
 
-<<<<<<< HEAD
-=======
   postcss-value-parser@4.2.0: {}
 
->>>>>>> c6da4c4 (progress)
   postcss@8.5.3:
     dependencies:
       nanoid: 3.3.9
@@ -4356,15 +4273,12 @@ snapshots:
 
   untildify@4.0.0: {}
 
-<<<<<<< HEAD
-=======
   update-browserslist-db@1.1.3(browserslist@4.24.4):
     dependencies:
       browserslist: 4.24.4
       escalade: 3.2.0
       picocolors: 1.1.1
 
->>>>>>> c6da4c4 (progress)
   update-notifier@6.0.2:
     dependencies:
       boxen: 7.1.1
@@ -4386,21 +4300,13 @@ snapshots:
 
   uuid@8.3.2: {}
 
-<<<<<<< HEAD
-  vite-node@3.0.8(@types/node@22.13.10)(jiti@2.4.2):
-=======
   vite-node@3.0.8(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.2):
->>>>>>> c6da4c4 (progress)
     dependencies:
       cac: 6.7.14
       debug: 4.4.0
       es-module-lexer: 1.6.0
       pathe: 2.0.3
-<<<<<<< HEAD
-      vite: 6.2.1(@types/node@22.13.10)(jiti@2.4.2)
-=======
       vite: 6.2.1(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.2)
->>>>>>> c6da4c4 (progress)
     transitivePeerDependencies:
       - '@types/node'
       - jiti
@@ -4415,11 +4321,7 @@ snapshots:
       - tsx
       - yaml
 
-<<<<<<< HEAD
-  vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2):
-=======
   vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.2):
->>>>>>> c6da4c4 (progress)
     dependencies:
       esbuild: 0.25.0
       postcss: 8.5.3
@@ -4428,10 +4330,7 @@ snapshots:
       '@types/node': 22.13.10
       fsevents: 2.3.3
       jiti: 2.4.2
-<<<<<<< HEAD
-=======
       lightningcss: 1.29.2
->>>>>>> c6da4c4 (progress)
 
   vscode-uri@3.1.0: {}
 
@@ -4541,11 +4440,7 @@ snapshots:
 
   ws@8.18.0: {}
 
-<<<<<<< HEAD
-  wxt@0.19.29(@types/node@22.13.10)(rollup@4.35.0):
-=======
   wxt@0.19.29(@types/node@22.13.10)(lightningcss@1.29.2)(rollup@4.35.0):
->>>>>>> c6da4c4 (progress)
     dependencies:
       '@1natsu/wait-element': 4.1.2
       '@aklinker1/rollup-plugin-visualizer': 5.12.0(rollup@4.35.0)
@@ -4591,13 +4486,8 @@ snapshots:
       publish-browser-extension: 3.0.0
       scule: 1.3.0
       unimport: 3.14.6(rollup@4.35.0)
-<<<<<<< HEAD
-      vite: 6.2.1(@types/node@22.13.10)(jiti@2.4.2)
-      vite-node: 3.0.8(@types/node@22.13.10)(jiti@2.4.2)
-=======
       vite: 6.2.1(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.2)
       vite-node: 3.0.8(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.2)
->>>>>>> c6da4c4 (progress)
       web-ext-run: 0.2.2
       webextension-polyfill: 0.12.0
     transitivePeerDependencies:
