@@ -79,7 +79,7 @@ def start_analysis_of_statements(request, url):
     return JsonResponse(
         {
             "contents": BiasedContentSerializer(m.biased_content.all(), many=True).data,
-            "average_misinformation": 1 - sum(contents) / len(contents),
+            "average_misinformation": 1 - sum([c.accuracy for c in contents]) / len(contents),
         }
     )
 
